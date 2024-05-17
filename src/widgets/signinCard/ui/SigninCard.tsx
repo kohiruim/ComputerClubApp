@@ -1,8 +1,24 @@
+import { type FC, type ReactNode, useState, useContext } from "react";
 import { Text, Group, Paper } from "@mantine/core";
-import { SigninButton, githubProvider, googleProvider } from "@/shared";
-import { handleLogin } from "../model";
+import {
+  SigninButton,
+  githubProvider,
+  googleProvider,
+  UserContext,
+} from "@/shared";
+import { handleLogin, showWidget } from "../model";
 
-export const SigninCard = () => {
+interface Props {
+  children: ReactNode;
+}
+
+export const SigninCard: FC<Props> = ({ children }) => {
+  const { setUserData } = useContext(UserContext);
+  const [usernameWidget, setUsernameWidget] = useState(false);
+
+  if (usernameWidget) {
+    return children;
+  }
   return (
     <Paper shadow="md" radius="md" withBorder p="xl" className="w-80">
       <Text ta="center" size="lg" lh="lg" mb="xl">
@@ -12,13 +28,21 @@ export const SigninCard = () => {
         <SigninButton
           typeProvider="google"
           onClick={() => {
-            handleLogin(googleProvider);
+            handleLogin(
+              googleProvider,
+              setUserData,
+              showWidget(setUsernameWidget)
+            );
           }}
         />
         <SigninButton
           typeProvider="github"
           onClick={() => {
-            handleLogin(githubProvider);
+            handleLogin(
+              githubProvider,
+              setUserData,
+              showWidget(setUsernameWidget)
+            );
           }}
         />
       </Group>

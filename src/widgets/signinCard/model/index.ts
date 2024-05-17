@@ -1,1 +1,1 @@
-export { handleLogin } from "./auth";
+export { handleLogin, showWidget } from "./auth";
