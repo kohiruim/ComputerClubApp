@@ -1,1 +1,3 @@
-export { app, auth, githubProvider, googleProvider, db } from "./firebase";
+export * from "./firebase";
+export * from "./clientsTable";
+export * from "./i18n";

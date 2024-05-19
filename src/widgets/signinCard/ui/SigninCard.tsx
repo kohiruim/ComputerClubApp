@@ -1,48 +1,62 @@
-import { type FC, type ReactNode, useState, useContext } from "react";
+import type { FC, ReactNode } from "react";
 import { Text, Group, Paper } from "@mantine/core";
 import {
   SigninButton,
   githubProvider,
   googleProvider,
-  UserContext,
+  UserRole,
+  Paths,
+  type UserData,
+  type Provider,
+  useAppDispatch,
+  useAppSelector,
 } from "@/shared";
-import { handleLogin, showWidget } from "../model";
+import { loginUser } from "../model";
+import { Navigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { notifications } from "@mantine/notifications";
 
 interface Props {
   children: ReactNode;
 }
 
 export const SigninCard: FC<Props> = ({ children }) => {
-  const { setUserData } = useContext(UserContext);
-  const [usernameWidget, setUsernameWidget] = useState(false);
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const isAuth = useAppSelector(state => state.userSlice.isAuth);
+  const currentUser: UserData = useAppSelector(
+    state => state.userSlice.currentUser
+  );
 
-  if (usernameWidget) {
+  const handleLogin = (provider: Provider) => {
+    loginUser(provider, dispatch).catch((error: Error) => {
+      notifications.show({ message: error.message, color: "violet" });
+    });
+  };
+
+  if (isAuth && !currentUser.username) {
     return children;
   }
+  if (isAuth && currentUser.role == UserRole.Admin) {
+    return <Navigate to={Paths.Admin} />;
+  }
+
   return (
-    <Paper shadow="md" radius="md" withBorder p="xl" className="w-80">
+    <Paper shadow="md" radius="md" withBorder p="xl">
       <Text ta="center" size="lg" lh="lg" mb="xl">
-        Войдите
+        {t("sign in")}
       </Text>
       <Group justify="center" gap="xs">
         <SigninButton
           typeProvider="google"
           onClick={() => {
-            handleLogin(
-              googleProvider,
-              setUserData,
-              showWidget(setUsernameWidget)
-            );
+            handleLogin(googleProvider);
           }}
         />
         <SigninButton
           typeProvider="github"
           onClick={() => {
-            handleLogin(
-              githubProvider,
-              setUserData,
-              showWidget(setUsernameWidget)
-            );
+            handleLogin(githubProvider);
           }}
         />
       </Group>
