@@ -1,34 +1,50 @@
-import { useContext } from "react";
 import { TextInput, Button } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { UserContext } from "@/shared";
-import { handleSubmit, usernameRegex } from "../model";
+import {
+  type UserData,
+  type AppDispatch,
+  useAppDispatch,
+  useAppSelector,
+  usernameValidation,
+} from "@/shared";
+import { z } from "zod";
+import { addCurrentUsername } from "../model";
+import { zodResolver } from "mantine-form-zod-resolver";
+import { useTranslation } from "react-i18next";
 
 export const UsernameForm = () => {
-  const { userData } = useContext(UserContext);
+  const { t } = useTranslation();
+  const dispatch: AppDispatch = useAppDispatch();
+  const currentUser: UserData = useAppSelector(
+    state => state.userSlice.currentUser
+  );
+
+  const schema = z.object({
+    username: usernameValidation(t),
+  });
 
   const form = useForm({
     initialValues: { username: "" },
-    validate: {
-      username: value =>
-        !usernameRegex.test(value) ? "невалидный никнейм" : null,
-    },
+    validate: zodResolver(schema),
   });
+
+  const handleSubmitUsername = (username: string) => {
+    addCurrentUsername(username, currentUser, dispatch);
+  };
 
   return (
     <form
-      onSubmit={form.onSubmit(() => {
-        handleSubmit(form.values.username, userData);
+      onSubmit={form.onSubmit(values => {
+        handleSubmitUsername(values.username);
       })}
     >
       <TextInput
         placeholder="Username"
-        key={form.key("username")}
-        style={{ width: "420px" }}
         {...form.getInputProps("username")}
+        style={{ width: "420px" }}
       />
       <Button type="submit" mt="sm" color="violet" fullWidth>
-        Submit
+        {t("save")}
       </Button>
     </form>
   );

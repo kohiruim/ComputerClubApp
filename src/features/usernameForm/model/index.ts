@@ -1,1 +1,1 @@
-export { handleSubmit, usernameRegex } from "./validateUsername";
+export { addCurrentUsername } from "./validateUsername";

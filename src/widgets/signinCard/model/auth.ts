@@ -1,41 +1,35 @@
-import type { Dispatch, SetStateAction } from "react";
-import { notifications } from "@mantine/notifications";
 import { signInWithPopup } from "firebase/auth";
 import { auth, db, type UserData, type Provider, UserRole } from "@/shared";
 import { collection, where, query, getDocs } from "firebase/firestore";
+import type { AppDispatch } from "@/app/store/store";
+import {
+  setCurrentUser,
+  setUserRole,
+  setIsAuth,
+  setCurrentUsername,
+} from "@/entities";
 
-const findUser = async (email: string) => {
+const findUserInDB = async (
+  email: string,
+  dispatch: AppDispatch
+): Promise<void> => {
   const makeQuery = query(collection(db, "users"), where("email", "==", email));
   const querySnapshot = await getDocs(makeQuery);
+
   if (!querySnapshot.empty) {
-    throw new Error("user logged");
+    const data: UserData = querySnapshot.docs[0]?.data() as UserData;
+    const userRole: UserRole = data?.role;
+    const username: string = data?.username ?? "";
+    dispatch(setCurrentUsername(username));
+    dispatch(setUserRole(userRole));
   }
+
+  dispatch(setIsAuth(true));
 };
 
-export const showWidget = (
-  setWidget: Dispatch<SetStateAction<boolean>>
-) => {
-  return () => {
-    setWidget(true);
-  };
-};
-
-const openCreateUsername = async (
-  email: string,
-  setshowUsernameWidget: () => void
-) => {
-  try {
-    await findUser(email);
-    setshowUsernameWidget();
-  } catch {
-    notifications.show({ message: "юзер зашел в учетку", color: "violet" });
-  }
-};
-
-const loginUser = async (
+export const loginUser = async (
   provider: Provider,
-  setUserData: (data: UserData) => void,
-  setshowUsernameWidget: () => void
+  dispatch: AppDispatch
 ): Promise<void> => {
   const result = await signInWithPopup(auth, provider);
   const res: UserData = {
@@ -43,19 +37,10 @@ const loginUser = async (
     id: result.user.uid,
     photo: result.user.photoURL ?? "",
     username: "",
-    phone: result.user.phoneNumber ?? "",
     role: UserRole.User,
+    balance: 0,
+    fullname: result.user.displayName ?? "",
   };
-  setUserData(res);
-  await openCreateUsername(res.email, setshowUsernameWidget);
-};
-
-export const handleLogin = (
-  provider: Provider,
-  setUserData: (data: UserData) => void,
-  setshowUsernameWidget: () => void
-) => {
-  loginUser(provider, setUserData, setshowUsernameWidget).catch(error => {
-    console.error(error);
-  });
+  dispatch(setCurrentUser(res));
+  await findUserInDB(res.email, dispatch);
 };

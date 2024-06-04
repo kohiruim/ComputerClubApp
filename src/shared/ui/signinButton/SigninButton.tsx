@@ -1,6 +1,7 @@
 import type { FC, ComponentPropsWithoutRef } from "react";
 import { Button } from "@mantine/core";
 import { GoogleIcon, GithubIcon } from "../../assets/";
+import { useTranslation } from "react-i18next";
 
 type DefaultInputProps = ComponentPropsWithoutRef<"button">;
 
@@ -13,6 +14,8 @@ export const SigninButton: FC<SigninButtonProps> = ({
   onClick,
   ...otherProps
 }) => {
+  const { t } = useTranslation();
+
   if (typeProvider === "google") {
     return (
       <Button
@@ -21,7 +24,7 @@ export const SigninButton: FC<SigninButtonProps> = ({
         onClick={onClick}
         {...otherProps}
       >
-        Продолжить с Google
+        {t("continue with google")}
       </Button>
     );
   }
@@ -33,7 +36,7 @@ export const SigninButton: FC<SigninButtonProps> = ({
       onClick={onClick}
       {...otherProps}
     >
-      Продолжить с Github
+      {t("continue with github")}
     </Button>
   );
 };

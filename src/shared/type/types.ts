@@ -1,16 +1,39 @@
 import type { githubProvider, googleProvider } from "@/shared";
 
-export enum UserRole {
-  User = "user",
-  Admin = "admin",
+export type { RootState, AppDispatch } from "@/app/store/store.ts";
+
+export enum Paths {
+  Login = "/",
+  Admin = "/users",
+  ClientEdit = "/users/edit",
 }
-export interface UserData {
+
+export enum UserRole {
+  User = "USER",
+  Admin = "ADMIN",
+}
+
+export enum Language {
+  "RU" = "ru",
+  "EN" = "en",
+}
+
+export type UserData = {
+  fullname: string;
   email: string;
   id: string;
   photo: string;
   username: string;
-  phone: string;
   role: UserRole;
-}
+  balance: number;
+};
+
+export type SearchConditionsUsers = {
+  fullname: string;
+  username: string;
+};
 
 export type Provider = typeof githubProvider | typeof googleProvider;
+export type Direction = "asc" | "desc";
+export type SearchButtonType = "search" | "reset";
+export type KeysUserData = keyof UserData;
