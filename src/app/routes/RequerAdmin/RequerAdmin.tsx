@@ -1,9 +1,11 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { UserRole, Paths, useAppSelector } from "@/shared";
+import { UserRole, Paths } from "@/shared/type";
+import { useAppSelector } from "@/shared/lib";
+import { selectIsAuth, selectRole } from "@/entities/user";
 
 export const RequerAdmin = () => {
-  const isAuth = useAppSelector(state => state.userSlice.isAuth);
-  const role = useAppSelector(state => state.userSlice.currentUser.role);
+  const isAuth = useAppSelector(selectIsAuth);
+  const role = useAppSelector(selectRole);
 
   if (isAuth && role === UserRole.Admin) {
     return <Outlet />;

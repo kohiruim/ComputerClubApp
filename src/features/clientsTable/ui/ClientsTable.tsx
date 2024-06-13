@@ -1,22 +1,15 @@
 import { Table } from "@mantine/core";
-import {
-  type UserData,
-  ClientsTableRow,
-  firebaseKeys,
-  headerItems,
-  ButtonSort,
-  useSortedData,
-  useAppSelector,
-  type KeysUserData,
-} from "@/shared";
+import { useSortedData, useAppSelector } from "@/shared/lib";
+import type { KeysUserData, UserData } from "@/shared/type";
+import { firebaseKeys, headerItems } from "@/shared/config";
+import { ButtonSort, ClientsTableRow } from "@/shared/ui";
+import { selectUsers } from "@/entities/user";
 import { useTranslation } from "react-i18next";
 
 export const ClientsTable = () => {
   const { t } = useTranslation();
-  const { direction, setItem, setDirection } = useSortedData();
-  const users: Array<UserData> = useAppSelector(
-    state => state.userSlice.clientsTable.users
-  );
+  const { direction, setSortedItem, setDirection } = useSortedData();
+  const users: Array<UserData> = useAppSelector(selectUsers);
 
   const headerHandleClick = (item: KeysUserData | undefined) => {
     return () => {
@@ -25,7 +18,7 @@ export const ClientsTable = () => {
       } else {
         setDirection("asc");
       }
-      item && setItem(item);
+      item && setSortedItem(item);
     };
   };
 

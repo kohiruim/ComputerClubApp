@@ -1,6 +1,6 @@
 import type { NavigateFunction } from "react-router-dom";
-import type { UserData, UserRole, AppDispatch } from "@/shared";
-import { modifyUserInDataBase } from "@/entities";
+import type { UserData, UserRole, AppDispatch } from "@/shared/type";
+import { modifyUserInDataBase } from "@/entities/user";
 
 type Values = {
   fullname: string;

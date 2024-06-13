@@ -35,6 +35,8 @@ i18n
           "client editing": "Client editing",
           "back to clients": "Back to clients",
           "balance cannot be negative": "Balance cannot be negative",
+          "nothing found": "Nothing found",
+          "search friends": "Search friends",
         },
       },
       RU: {
@@ -65,6 +67,8 @@ i18n
           "Client editing": "Редактирование клиента",
           "back to clients": "Назад к клиентам",
           "balance cannot be negative": "баланс не может быть отрицательным",
+          "nothing found": "Ничего не найдено",
+          "search friends": "Поиск друзей",
         },
       },
     },

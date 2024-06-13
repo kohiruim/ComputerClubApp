@@ -1,5 +1,5 @@
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "@/shared";
+import type { QueryConditions } from "@/shared/type";
+import { makeFirebaseQuery } from "@/shared/lib";
 import { z } from "zod";
 import type { TFunction } from "i18next";
 
@@ -24,14 +24,14 @@ export const validateForm = async (
   inputType: "username" | "email",
   actionType: "add" | "update"
 ): Promise<void> => {
-  const makeQuery = query(
-    collection(db, "users"),
-    where(inputType, "==", value)
-  );
+  const searchConditions: QueryConditions = {
+    conditionsType: "strict",
+    conditions: { [inputType]: value },
+  };
+  const querySnapshot = await makeFirebaseQuery({ searchConditions });
   const countDocs = actionType == "add" ? 0 : 1;
 
-  const querySnapshot = await getDocs(makeQuery);
-  if (querySnapshot.size > countDocs) {
+  if (querySnapshot.length > countDocs) {
     throw new Error("User already exists");
   }
 };

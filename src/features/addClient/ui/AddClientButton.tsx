@@ -2,16 +2,17 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, TextInput, NativeSelect, Flex } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { addClient } from "../model";
+import { UserRole } from "@/shared/type";
 import {
   useAppDispatch,
-  UserRole,
   useAppSelector,
   usernameValidation,
   emailValidation,
-} from "@/shared";
+} from "@/shared/lib";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
+import { selectLoading } from "@/entities/user";
 
 interface Values {
   fullname: string;
@@ -23,7 +24,7 @@ interface Values {
 export const AddClientButton = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const dispatch = useAppDispatch();
-  const isLoading = useAppSelector(state => state.userSlice.isLoading);
+  const isLoading = useAppSelector(selectLoading);
   const { t } = useTranslation();
 
   const shema = z.object({
@@ -86,16 +87,14 @@ export const AddClientButton = () => {
             {...form.getInputProps("email")}
           />
           <Flex justify="flex-end">
-            <Button type="submit" color="indigo" loading={isLoading}>
+            <Button type="submit" loading={isLoading}>
               {t("add client")}
             </Button>
           </Flex>
         </form>
       </Modal>
 
-      <Button color="indigo" onClick={open}>
-        {t("add client")}
-      </Button>
+      <Button onClick={open}>{t("add client")}</Button>
     </>
   );
 };

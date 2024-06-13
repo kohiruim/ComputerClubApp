@@ -7,20 +7,20 @@ import {
   NumberInput,
 } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import { type UserData, UserRole } from "@/shared/type";
 import {
-  type UserData,
-  UserRole,
   useAppDispatch,
   useAppSelector,
   usernameValidation,
   emailValidation,
-} from "@/shared";
+} from "@/shared/lib";
 import { Coins } from "@/shared/assets";
 import { useForm } from "@mantine/form";
 import { useTranslation } from "react-i18next";
 import { CgLogOut } from "react-icons/cg";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { updateUser } from "../model";
+import { selectLoading } from "@/entities/user";
 import { z } from "zod";
 
 type Props = {
@@ -38,7 +38,7 @@ type FormValues = {
 export const ClientEditForm: FC<Props> = ({ user }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const isLoading = useAppSelector(state => state.userSlice.isLoading);
+  const isLoading = useAppSelector(selectLoading);
   const { t } = useTranslation();
 
   const shema = z.object({
@@ -109,7 +109,6 @@ export const ClientEditForm: FC<Props> = ({ user }) => {
       />
       <Group justify="center">
         <Button
-          color="indigo"
           leftSection={<CgLogOut size={20} />}
           onClick={() => {
             navigate(-1);
@@ -117,7 +116,7 @@ export const ClientEditForm: FC<Props> = ({ user }) => {
         >
           {t("back to clients")}
         </Button>
-        <Button type="submit" color="indigo" loading={isLoading}>
+        <Button type="submit" loading={isLoading}>
           {t("save")}
         </Button>
       </Group>

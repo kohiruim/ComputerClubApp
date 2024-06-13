@@ -1,20 +1,14 @@
 import type { FC, ReactNode } from "react";
 import { Text, Group, Paper } from "@mantine/core";
-import {
-  SigninButton,
-  githubProvider,
-  googleProvider,
-  UserRole,
-  Paths,
-  type UserData,
-  type Provider,
-  useAppDispatch,
-  useAppSelector,
-} from "@/shared";
+import { UserRole, Paths, type UserData, type Provider } from "@/shared/type";
+import { useAppDispatch, useAppSelector } from "@/shared/lib";
+import { githubProvider, googleProvider } from "@/shared/config";
+import { SigninButton } from "@/shared/ui";
 import { loginUser } from "../model";
 import { Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { notifications } from "@mantine/notifications";
+import { selectIsAuth, selectCurrentUser } from "@/entities/user";
 
 interface Props {
   children: ReactNode;
@@ -23,14 +17,12 @@ interface Props {
 export const SigninCard: FC<Props> = ({ children }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const isAuth = useAppSelector(state => state.userSlice.isAuth);
-  const currentUser: UserData = useAppSelector(
-    state => state.userSlice.currentUser
-  );
+  const isAuth = useAppSelector(selectIsAuth);
+  const currentUser: UserData = useAppSelector(selectCurrentUser);
 
   const handleLogin = (provider: Provider) => {
     loginUser(provider, dispatch).catch((error: Error) => {
-      notifications.show({ message: error.message, color: "violet" });
+      notifications.show({ message: error.message });
     });
   };
 

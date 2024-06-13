@@ -2,18 +2,20 @@ import type { Dispatch, SetStateAction } from "react";
 import type {
   SearchButtonType,
   AppDispatch,
-  SearchConditionsUsers,
-} from "@/shared";
-import { setSearchConditions, makeClientsQuery } from "@/entities";
+  QueryConditionParams,
+} from "@/shared/type";
+import { makeClientsQuery, setSearchConditions } from "@/entities/user";
 
 export const searchClientsForm = async (
-  values: SearchConditionsUsers,
+  values: QueryConditionParams,
   dispatch: AppDispatch,
   setTypeSearchButton: Dispatch<SetStateAction<SearchButtonType>>
 ): Promise<void> => {
   if (values.username || values.fullname) {
     dispatch(setSearchConditions(values));
-    await dispatch(makeClientsQuery({ item: "username", direction: "asc" }));
+    await dispatch(
+      makeClientsQuery({ sortedItem: "username", direction: "asc" })
+    );
     setTypeSearchButton("reset");
   }
 };

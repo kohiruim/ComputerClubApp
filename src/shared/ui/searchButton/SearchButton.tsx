@@ -2,8 +2,9 @@ import { Button } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { IoClose, IoSearch } from "react-icons/io5";
 import type { FC, Dispatch, SetStateAction } from "react";
-import { type SearchButtonType, useAppDispatch } from "@/shared";
-import { makeClientsQuery, setSearchConditions } from "@/entities";
+import { useAppDispatch } from "@/shared/lib";
+import type { SearchButtonType } from "@/shared/type";
+import { makeClientsQuery, setSearchConditions } from "@/entities/user";
 
 interface Form {
   values: {
@@ -26,7 +27,7 @@ export const SearchButton: FC<Props> = ({ type, form, setType }) => {
   const handleResetForm = () => {
     form.reset();
     dispatch(setSearchConditions({ fullname: "", username: "" }));
-    dispatch(makeClientsQuery({ item: "username", direction: "asc" }));
+    dispatch(makeClientsQuery({ sortedItem: "username", direction: "asc" }));
     setType("search");
   };
 
@@ -35,7 +36,6 @@ export const SearchButton: FC<Props> = ({ type, form, setType }) => {
       <Button
         type="submit"
         variant="outline"
-        color="indigo"
         mt="auto"
         leftSection={<IoSearch />}
       >
@@ -47,7 +47,6 @@ export const SearchButton: FC<Props> = ({ type, form, setType }) => {
       <Button
         type="reset"
         variant="outline"
-        color="indigo"
         mt="auto"
         leftSection={<IoClose />}
         onClick={handleResetForm}

@@ -1,4 +1,4 @@
-import type { githubProvider, googleProvider } from "@/shared";
+import type { githubProvider, googleProvider } from "@/shared/config";
 
 export type { RootState, AppDispatch } from "@/app/store/store.ts";
 
@@ -6,6 +6,7 @@ export enum Paths {
   Login = "/",
   Admin = "/users",
   ClientEdit = "/users/edit",
+  UserPage = "/page",
 }
 
 export enum UserRole {
@@ -28,12 +29,15 @@ export type UserData = {
   balance: number;
 };
 
-export type SearchConditionsUsers = {
-  fullname: string;
-  username: string;
+export type QueryConditionParams = Partial<UserData>;
+
+export type QueryConditions = {
+  conditionsType: "strict" | "nonStrict";
+  conditions: Partial<UserData>;
 };
 
 export type Provider = typeof githubProvider | typeof googleProvider;
 export type Direction = "asc" | "desc";
 export type SearchButtonType = "search" | "reset";
+export type Sizes = "small" | "medium";
 export type KeysUserData = keyof UserData;

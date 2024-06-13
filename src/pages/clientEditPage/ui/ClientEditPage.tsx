@@ -1,8 +1,8 @@
 import { Paper, Text } from "@mantine/core";
 import { useLocation } from "react-router-dom";
-import type { UserData } from "@/shared";
+import type { UserData } from "@/shared/type";
 import { useTranslation } from "react-i18next";
-import { ClientEditForm } from "@/features";
+import { ClientEditForm } from "@/features/editClient";
 
 type LocationState = {
   editableUser: UserData;

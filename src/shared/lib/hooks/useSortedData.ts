@@ -1,28 +1,28 @@
 import { type SetStateAction, useState, type Dispatch, useEffect } from "react";
+import type { Direction, KeysUserData } from "@/shared/type";
+import { useAppDispatch, useAppSelector } from "@/shared/lib";
 import {
-  type Direction,
-  type KeysUserData,
-  useAppDispatch,
-  useAppSelector,
-} from "@/shared";
-import { makeClientsQuery, setTotalCountUsers } from "@/entities";
+  makeClientsQuery,
+  setTotalCountUsers,
+  selectRowsLimit,
+} from "@/entities/user";
 
 interface SortedData {
   direction: Direction;
-  setItem: Dispatch<SetStateAction<KeysUserData>>;
+  setSortedItem: Dispatch<SetStateAction<KeysUserData>>;
   setDirection: Dispatch<SetStateAction<Direction>>;
 }
 
 export const useSortedData = (): SortedData => {
   const dispatch = useAppDispatch();
-  const limit = useAppSelector(state => state.userSlice.clientsTable.rowsLimit);
-  const [item, setItem] = useState<KeysUserData>("username");
+  const limit = useAppSelector(selectRowsLimit);
+  const [sortedItem, setSortedItem] = useState<KeysUserData>("username");
   const [direction, setDirection] = useState<Direction>("asc");
 
   useEffect(() => {
     dispatch(setTotalCountUsers());
-    dispatch(makeClientsQuery({ item, direction }));
-  }, [item, direction, dispatch, limit]);
+    dispatch(makeClientsQuery({ sortedItem, direction }));
+  }, [sortedItem, direction, dispatch, limit]);
 
-  return { direction, setItem, setDirection };
+  return { direction, setSortedItem, setDirection };
 };

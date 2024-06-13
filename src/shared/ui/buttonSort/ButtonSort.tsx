@@ -1,7 +1,7 @@
 import type { FC, ComponentPropsWithoutRef } from "react";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { Button } from "@mantine/core";
-import type { Direction } from "@/shared";
+import type { Direction } from "@/shared/type";
 
 type DefaultProps = ComponentPropsWithoutRef<"button">;
 type Props = Omit<DefaultProps, "className"> & {
