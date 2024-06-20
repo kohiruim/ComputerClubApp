@@ -7,39 +7,50 @@ import {
   limit,
   type QueryConstraint,
 } from "firebase/firestore";
-import {
-  db,
-  type UserData,
-  type SearchConditionsUsers,
-  type Direction,
-  type KeysUserData,
-} from "@/shared";
+import type {
+  UserData,
+  QueryConditions,
+  Direction,
+  KeysUserData,
+} from "@/shared/type";
+import { db } from "@/shared/config";
 
 const createConditions = (
-  searchConditions: SearchConditionsUsers
+  searchConditions: QueryConditions
 ): Array<QueryConstraint> => {
   const conditions: Array<QueryConstraint> = [];
 
-  const entries = Object.entries(searchConditions);
-  entries.forEach(([key, value]) => {
-    value && conditions.push(where(key, ">=", value));
-    value && conditions.push(where(key, "<=", value + "\uf8ff"));
-  });
+  const entries = Object.entries(searchConditions.conditions);
+  if (searchConditions.conditionsType == "nonStrict") {
+    entries.forEach(([key, value]) => {
+      value && conditions.push(where(key, ">=", value));
+      value && conditions.push(where(key, "<=", value + "\uf8ff"));
+    });
+  } else {
+    entries.forEach(([key, value]) => {
+      value && conditions.push(where(key, "==", value));
+    });
+  }
 
   return conditions;
 };
 
 export type ClientsQueryParams = {
-  item: KeysUserData;
-  direction: Direction;
-  searchConditions: SearchConditionsUsers;
-  tableRowsLimit: number;
+  sortedItem?: KeysUserData;
+  direction?: Direction;
+  searchConditions: QueryConditions;
+  tableRowsLimit?: number;
 };
 
-export const makeSortedQuery = async (
+export const makeFirebaseQuery = async (
   params: ClientsQueryParams
 ): Promise<Array<UserData>> => {
-  const { item, direction, searchConditions, tableRowsLimit } = params;
+  const {
+    sortedItem,
+    direction,
+    tableRowsLimit = 0,
+    searchConditions,
+  } = params;
   try {
     const elements: Array<UserData> = [];
     const conditions = createConditions(searchConditions);
@@ -47,8 +58,8 @@ export const makeSortedQuery = async (
     const usersQuery = query(
       collection(db, "users"),
       ...conditions,
-      orderBy(item, direction),
-      limit(tableRowsLimit)
+      ...(sortedItem && direction ? [orderBy(sortedItem, direction)] : []),
+      ...(tableRowsLimit ? [limit(tableRowsLimit)] : [])
     );
     const querySnapshot = await getDocs(usersQuery);
 

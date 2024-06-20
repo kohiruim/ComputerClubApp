@@ -1,7 +1,8 @@
 import { notifications } from "@mantine/notifications";
-import type { UserData, UserRole, AppDispatch } from "@/shared";
+import type { UserData, UserRole, AppDispatch } from "@/shared/type";
+
 import { v4 as uuidv4 } from "uuid";
-import { modifyUserInDataBase, makeClientsQuery } from "@/entities";
+import { modifyUserInDataBase, makeClientsQuery } from "@/entities/user";
 
 interface Values {
   fullname: string;
@@ -23,11 +24,13 @@ export const addClient = async (
       id: uuidv4(),
     };
     await dispatch(modifyUserInDataBase({ user: user, actionType: "add" }));
-    await dispatch(makeClientsQuery({ item: "username", direction: "asc" }));
+    await dispatch(
+      makeClientsQuery({ sortedItem: "username", direction: "asc" })
+    );
     closeWindow();
   } catch (error) {
     if (error instanceof Error) {
-      notifications.show({ message: error.message, color: "violet" });
+      notifications.show({ message: error.message });
     } else {
       console.error(error);
     }

@@ -1,5 +1,5 @@
-import type { UserData, AppDispatch } from "@/shared";
-import { modifyUserInDataBase, setCurrentUsername } from "@/entities";
+import type { UserData, AppDispatch } from "@/shared/type";
+import { modifyUserInDataBase, setCurrentUsername } from "@/entities/user";
 
 export const addCurrentUsername = async (
   username: string,

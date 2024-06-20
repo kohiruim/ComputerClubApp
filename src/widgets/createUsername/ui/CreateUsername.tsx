@@ -1,5 +1,5 @@
 import { Paper, Text } from "@mantine/core";
-import { UsernameForm } from "@/features";
+import { UsernameForm } from "@/features/usernameForm";
 import { useTranslation } from "react-i18next";
 
 export const CreateUsername = () => {

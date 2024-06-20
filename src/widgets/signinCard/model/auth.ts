@@ -1,23 +1,33 @@
 import { signInWithPopup } from "firebase/auth";
-import { auth, db, type UserData, type Provider, UserRole } from "@/shared";
-import { collection, where, query, getDocs } from "firebase/firestore";
+import {
+  type UserData,
+  type Provider,
+  UserRole,
+  type QueryConditions,
+} from "@/shared/type";
+import { makeFirebaseQuery } from "@/shared/lib";
+import { auth } from "@/shared/config";
 import type { AppDispatch } from "@/app/store/store";
 import {
   setCurrentUser,
   setUserRole,
   setIsAuth,
   setCurrentUsername,
-} from "@/entities";
+} from "@/entities/user";
 
 const findUserInDB = async (
   email: string,
   dispatch: AppDispatch
 ): Promise<void> => {
-  const makeQuery = query(collection(db, "users"), where("email", "==", email));
-  const querySnapshot = await getDocs(makeQuery);
+  const searchConditions: QueryConditions = {
+    conditionsType: "strict",
+    conditions: { email: email },
+  };
 
-  if (!querySnapshot.empty) {
-    const data: UserData = querySnapshot.docs[0]?.data() as UserData;
+  const querySnapshot = await makeFirebaseQuery({ searchConditions });
+
+  if (querySnapshot.length) {
+    const data: UserData = querySnapshot[0] as UserData;
     const userRole: UserRole = data?.role;
     const username: string = data?.username ?? "";
     dispatch(setCurrentUsername(username));

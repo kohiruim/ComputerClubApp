@@ -1,4 +1,4 @@
-import type { KeysUserData } from "@/shared";
+import type { KeysUserData } from "@/shared/type";
 
 export const headerItems = ["fullname", "role", "username", "email", "balance"];
 

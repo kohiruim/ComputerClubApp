@@ -1,12 +1,9 @@
 import { Group, TextInput } from "@mantine/core";
 import { useState } from "react";
 import { useForm } from "@mantine/form";
-import {
-  SearchButton,
-  type SearchButtonType,
-  useAppDispatch,
-  type SearchConditionsUsers,
-} from "@/shared";
+import type { SearchButtonType, QueryConditionParams } from "@/shared/type";
+import { useAppDispatch } from "@/shared/lib";
+import { SearchButton } from "@/shared/ui";
 import { searchClientsForm } from "../model";
 import { useTranslation } from "react-i18next";
 
@@ -24,7 +21,7 @@ export const SearchClientsForm = () => {
     },
   });
 
-  const handleSubmit = (values: SearchConditionsUsers) => {
+  const handleSubmit = (values: QueryConditionParams) => {
     searchClientsForm(values, dispatch, setTypeSearchButton).catch(
       console.error
     );
