@@ -34,6 +34,20 @@ export type SearchConditionsUsers = {
   username: string;
 };
 
+export type QuizData = {
+  id: string;
+  title: string;
+  image?: string;
+  time: string;
+  questions: Array<{
+    id: string;
+    image?: string;
+    question: string;
+    options: Array<string>;
+    answer: string;
+  }>;
+};
+
 export type Provider = typeof githubProvider | typeof googleProvider;
 export type Direction = "asc" | "desc";
 export type SearchButtonType = "search" | "reset";
