@@ -5,6 +5,7 @@ export type { RootState, AppDispatch } from "@/app/store/store.ts";
 export enum Paths {
   Login = "/",
   Admin = "/users",
+  Quizzes = "/quizzes",
   ClientEdit = "/users/edit",
 }
 
