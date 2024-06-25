@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { userReduser } from "@/entities";
+import { userReduser, quizReducer } from "@/entities";
 
 export const store = configureStore({
   reducer: {
     userSlice: userReduser,
+    quizSlice: quizReducer,
   },
 });
 
