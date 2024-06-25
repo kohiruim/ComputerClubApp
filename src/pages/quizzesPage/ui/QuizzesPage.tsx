@@ -1,4 +1,5 @@
-import { useAppSelector } from "@/shared";
+import { AddQuizButton } from "@/features";
+import { UserRole, useAppSelector } from "@/shared";
 import { useGetQuizzesData } from "@/shared/lib/hooks/useGetQuizzes";
 import {
   SimpleGrid,
@@ -28,6 +29,7 @@ const useStyles = () => ({
 
 export const QuizzesPage = () => {
   useGetQuizzesData();
+  const role = useAppSelector(state => state.userSlice.currentUser.role);
 
   const {
     quizzesList: { quizzes },
@@ -61,12 +63,15 @@ export const QuizzesPage = () => {
     </Card>
   ));
 
+  // const createQuiz = () => {};
+
   return (
     <Container size="xl" py="xl">
       <Flex justify="space-between">
         <Title order={2} mb="lg">
           Quizzes
         </Title>
+        {role === UserRole.Admin && <AddQuizButton />}
       </Flex>
 
       <SimpleGrid cols={{ base: 1, sm: 4 }}>{...cards}</SimpleGrid>
