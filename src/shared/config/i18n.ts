@@ -35,6 +35,7 @@ i18n
           "client editing": "Client editing",
           "back to clients": "Back to clients",
           "balance cannot be negative": "Balance cannot be negative",
+          Quizzes: "Quizzes",
         },
       },
       RU: {
@@ -65,6 +66,7 @@ i18n
           "Client editing": "Редактирование клиента",
           "back to clients": "Назад к клиентам",
           "balance cannot be negative": "баланс не может быть отрицательным",
+          Quizzes: "Викторины",
         },
       },
     },
