@@ -11,41 +11,51 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { addQuiz } from "../model/addQuiz";
-import { useAppDispatch, useAppSelector } from "@/shared";
+import { useAppDispatch } from "@/shared";
+import { useTranslation } from "react-i18next";
 import { MdUpload } from "react-icons/md";
+import { useState } from "react";
 
 interface Values {
   title: string;
   time: string;
-  image: string;
+  image: File | null;
 }
 
 export const AddQuizButton = () => {
+  const { t } = useTranslation();
   const [opened, { open, close }] = useDisclosure(false);
   const dispatch = useAppDispatch();
-  const isLoading = useAppSelector(state => state.quizSlice.isLoading);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
       title: "",
       time: "",
-      image: "",
+      image: null,
     },
   });
 
   const closeModal = () => {
     form.reset();
+    setIsLoading(false);
     close();
   };
 
-  const handleAddQuiz = (values: Values) => {
-    addQuiz(values, dispatch, close);
+  const handleAddQuiz = async (values: Values) => {
+    setIsLoading(true);
+    await addQuiz(values, dispatch, closeModal);
   };
 
   return (
     <>
-      <Modal opened={opened} onClose={closeModal} title="Add Quiz" centered>
+      <Modal
+        opened={opened}
+        onClose={closeModal}
+        title={t("Add Quiz")}
+        centered
+      >
         <form
           onSubmit={form.onSubmit(values => {
             handleAddQuiz(values);
@@ -53,16 +63,16 @@ export const AddQuizButton = () => {
         >
           <TextInput
             withAsterisk
-            label="Name of the quiz"
-            placeholder={"Name of the quiz"}
+            label={t("Name of the quiz")}
+            placeholder={t("Name of the quiz")}
             key={form.key("title")}
             mb={20}
             {...form.getInputProps("title")}
           />
           <NumberInput
             withAsterisk
-            label="Time of the quiz"
-            placeholder="Time of the quiz"
+            label={t("Time of the quiz")}
+            placeholder={t("Time of the quiz")}
             key={form.key("time")}
             mb={20}
             allowDecimal={false}
@@ -73,10 +83,11 @@ export const AddQuizButton = () => {
           />
           <FileInput
             accept="image/png,image/jpeg"
-            label="Add picture"
+            label={t("Add picture")}
             leftSection={
               <MdUpload style={{ width: rem(18), height: rem(18) }} />
             }
+            required
             {...form.getInputProps("image")}
           />
           <Flex justify="flex-end" p={"md"}>
@@ -88,7 +99,7 @@ export const AddQuizButton = () => {
       </Modal>
 
       <Button color="indigo" onClick={open}>
-        Add Quiz
+        {t("Add Quiz")}
       </Button>
     </>
   );
