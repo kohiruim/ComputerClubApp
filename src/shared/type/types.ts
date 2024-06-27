@@ -5,6 +5,7 @@ export type { RootState, AppDispatch } from "@/app/store/store.ts";
 export enum Paths {
   Login = "/",
   Admin = "/users",
+  Quizzes = "/quizzes",
   ClientEdit = "/users/edit",
 }
 
@@ -31,6 +32,20 @@ export type UserData = {
 export type SearchConditionsUsers = {
   fullname: string;
   username: string;
+};
+
+export type QuizData = {
+  id: string;
+  title: string;
+  image?: string;
+  time: string;
+  questions: Array<{
+    id: string;
+    image?: string;
+    question: string;
+    options: Array<string>;
+    answer: string;
+  }>;
 };
 
 export type Provider = typeof githubProvider | typeof googleProvider;
