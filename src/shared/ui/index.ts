@@ -5,3 +5,6 @@ export { ButtonSort } from "./buttonSort/ButtonSort";
 export { SearchButton } from "./searchButton/SearchButton";
 export { ClientsTableRow } from "./clientsTableRow/ClientsTableRow";
 export { LoadButton } from "./loadButton/LoadButton";
+export { RequerAuth } from "./requerAuth/RequerAuth";
+export { LoaderContainer } from "./loaderContainer/LoaderContainer";
+export { QuizCard } from "./quizCard/QuizCard";

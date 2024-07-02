@@ -45,6 +45,7 @@ i18n
           "Time of the quiz": "Time of the quiz",
           "Add picture": "Add picture",
           "Not specified": "Not specified",
+          Add: "Add",
         },
       },
       RU: {
@@ -85,6 +86,7 @@ i18n
           "Time of the quiz": "Время викторины",
           "Add picture": "Добавить изображение",
           "Not specified": "Не указано",
+          Add: "Добавить",
         },
       },
     },
