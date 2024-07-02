@@ -5,10 +5,11 @@ import { Logo } from "@/shared/assets";
 import { Link } from "react-router-dom";
 import { Paths, useAppSelector } from "@/shared";
 import { useTranslation } from "react-i18next";
+import { selectIsAuth } from "@/entities";
 
 export function Header() {
   const { t } = useTranslation();
-  const isAuth = useAppSelector(state => state.userSlice.isAuth);
+  const isAuth = useAppSelector(selectIsAuth);
 
   const handleChangeLanguage = (value: string) => {
     i18n.changeLanguage(value);

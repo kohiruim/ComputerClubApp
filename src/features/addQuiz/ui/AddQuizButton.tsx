@@ -10,11 +10,10 @@ import {
   NumberInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { addQuiz } from "../model/addQuiz";
-import { useAppDispatch } from "@/shared";
+import { useAppDispatch, useAppSelector } from "@/shared";
 import { useTranslation } from "react-i18next";
 import { MdUpload } from "react-icons/md";
-import { useState } from "react";
+import { addQuiz, getQuizzesInDataBase, selectNewQuiz } from "@/entities";
 
 interface Values {
   title: string;
@@ -26,7 +25,7 @@ export const AddQuizButton = () => {
   const { t } = useTranslation();
   const [opened, { open, close }] = useDisclosure(false);
   const dispatch = useAppDispatch();
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading } = useAppSelector(selectNewQuiz);
 
   const form = useForm({
     mode: "uncontrolled",
@@ -39,13 +38,13 @@ export const AddQuizButton = () => {
 
   const closeModal = () => {
     form.reset();
-    setIsLoading(false);
     close();
   };
 
   const handleAddQuiz = async (values: Values) => {
-    setIsLoading(true);
-    await addQuiz(values, dispatch, closeModal);
+    await dispatch(addQuiz(values));
+    closeModal();
+    dispatch(getQuizzesInDataBase({ itemLimit: 21 }));
   };
 
   return (
@@ -84,15 +83,13 @@ export const AddQuizButton = () => {
           <FileInput
             accept="image/png,image/jpeg"
             label={t("Add picture")}
-            leftSection={
-              <MdUpload style={{ width: rem(18), height: rem(18) }} />
-            }
+            leftSection={<MdUpload width={rem(18)} height={rem(18)} />}
             required
             {...form.getInputProps("image")}
           />
           <Flex justify="flex-end" p={"md"}>
             <Button type="submit" color="indigo" loading={isLoading}>
-              Add
+              {t("Add")}
             </Button>
           </Flex>
         </form>

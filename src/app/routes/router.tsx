@@ -1,8 +1,7 @@
 import { ClientsPage, LoginPage, ClientEditPage, QuizzesPage } from "@/pages";
 import { createBrowserRouter } from "react-router-dom";
 import { RequerAdmin } from "./RequerAdmin/RequerAdmin";
-import { RequerAuth } from "./RequerAuth/RequerAuth";
-import { Paths } from "@/shared";
+import { RequerAuth, Paths } from "@/shared";
 import "@mantine/notifications/styles.css";
 import { Layout } from "../layout";
 

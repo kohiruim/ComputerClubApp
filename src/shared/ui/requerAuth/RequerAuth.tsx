@@ -1,8 +1,9 @@
+import { selectIsAuth } from "@/entities/user/model/selectors";
 import { Paths, useAppSelector } from "@/shared";
 import { Navigate, Outlet } from "react-router-dom";
 
 export const RequerAuth = () => {
-  const isAuth = useAppSelector(state => state.userSlice.isAuth);
+  const isAuth = useAppSelector(selectIsAuth);
 
   if (isAuth) {
     return <Outlet />;
